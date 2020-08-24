@@ -25,5 +25,6 @@ public class T {
 			Thread.sleep(50);
 			tf.repaint();
 		}
+		
 	}
 }
