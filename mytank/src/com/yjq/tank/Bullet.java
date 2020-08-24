@@ -1,7 +1,7 @@
 package com.yjq.tank;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
     * @projectName： mytank
@@ -16,6 +16,14 @@ public class Bullet {
 	private int x,y;
 	private Dir dir;
 	public static final int SPEED=6;
+	private Group group = Group.BAD;
+	
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
+	}
 	public static int WIDTH=ResourceMgr.bulletD.getWidth();
 	public static int HEIGHT=ResourceMgr.bulletD.getHeight();
 	private boolean living=true;
@@ -63,11 +71,12 @@ public class Bullet {
 		this.living = living;
 	}
 
-	public Bullet(int x, int y, Dir dir,TankFrame tf) {
+	public Bullet(int x, int y, Dir dir,Group group,TankFrame tf) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.group=group;
 		this.tf = tf;
 	}
 	
@@ -127,4 +136,42 @@ public class Bullet {
 			living = false;
 		}
 	}
+
+		
+		    /**
+		    * @Title: collideWith
+		    * @author 杨君权
+		    * @Description: TODO(这里用一句话描述这个方法的作用)
+		    * @param 
+		    * @param 
+		    * @return 
+		    * @throws
+		    */
+		    
+		public void collideWith(Tank tank) {
+			if(this.group==tank.getGroup()) {
+				return;
+			}
+			Rectangle rectangle1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+			Rectangle rectangle2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
+			if(rectangle1.intersects(rectangle2)) {
+				this.die();
+				tank.die();
+			}
+		}
+
+			
+			    /**
+			    * @Title: die
+			    * @author 杨君权
+			    * @Description: TODO(这里用一句话描述这个方法的作用)
+			    * @param 
+			    * @param 
+			    * @return 
+			    * @throws
+			    */
+			    
+			private void die() {
+				this.living=false;
+			}
 }

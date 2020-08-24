@@ -1,7 +1,7 @@
 package com.yjq.tank;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 /**
     * @projectName： mytank
@@ -17,8 +17,25 @@ public class Tank {
 	private Dir dir=Dir.DOWN;
 	public static final int SPEED=3;
 	private boolean moving = false;
-	private static int WIDTH=ResourceMgr.tankD.getWidth();
-	private static int HEIGHT=ResourceMgr.tankD.getHeight();
+	private boolean living = true;
+	private Random random = new Random();
+	private Group group = Group.BAD;
+	
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+	public boolean isLiving() {
+		return living;
+	}
+	public void setLiving(boolean living) {
+		this.living = living;
+	}
+
+	public static int WIDTH=ResourceMgr.tankD.getWidth();
+	public static int HEIGHT=ResourceMgr.tankD.getHeight();
 	TankFrame tf = null;
 	public boolean isMoving() {
 		return moving;
@@ -26,11 +43,12 @@ public class Tank {
 	public void setMoving(boolean moving) {
 		this.moving = moving;
 	}
-	public Tank(int x, int y, Dir dir,TankFrame tf) {
+	public Tank(int x, int y, Dir dir,Group group,TankFrame tf) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.group=group;
 		this.tf = tf;
 	}
 	public int getX() {
@@ -63,6 +81,9 @@ public class Tank {
 	    */
 	    
 	public void paint(Graphics g) {
+		if(!living) {
+			tf.tanks.remove(this);
+		}
 //		Color color = g.getColor();
 		switch(dir) {
 		case LEFT:
@@ -112,6 +133,10 @@ public class Tank {
 				break;
 				default:break;
 			}
+			
+			if(this.group==Group.BAD && random.nextInt(100)>90) {
+				this.fire();
+			}
 		}
 			
 			    /**
@@ -135,8 +160,22 @@ public class Tank {
 					bY=this.y+Tank.HEIGHT/2;
 				}
 				
-				tf.bullets.add(new Bullet(bX,bY,this.dir,this.tf));
+				tf.bullets.add(new Bullet(bX,bY,this.dir,this.group,this.tf));
 			}
+				
+				    /**
+				    * @Title: die
+				    * @author 杨君权
+				    * @Description: TODO(这里用一句话描述这个方法的作用)
+				    * @param 
+				    * @param 
+				    * @return 
+				    * @throws
+				    */
+				    
+				public void die() {
+					this.living=false;
+				}
 	
 	
 

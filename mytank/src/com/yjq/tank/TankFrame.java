@@ -21,9 +21,11 @@ import java.util.List;
 
 public class TankFrame extends Frame{
 
-	Tank mytank = new Tank(200,200,Dir.DOWN,this);
+	Tank mytank = new Tank(100,500,Dir.DOWN,Group.GOOD,this);
 //	Bullet b=new Bullet(300,300,Dir.DOWN);
 	List<Bullet> bullets=new ArrayList<>();
+	List<Tank> tanks=new ArrayList<>();
+	Explode e = new Explode(100, 100, this);
 	public static final int GAME_WIDTH=1000,GAME_HEIGHT=800;
 	public TankFrame(){
 		this.setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -66,11 +68,21 @@ public class TankFrame extends Frame{
 		Color color = g.getColor();
 		g.setColor(Color.WHITE);
 		g.drawString("子弹的数量："+bullets.size(), 10, 60);
+		g.drawString("坦克的数量："+tanks.size(), 10, 100);
 		g.setColor(color);
 		mytank.paint(g);
 		for(int i=0;i<bullets.size();i++) {
 			bullets.get(i).paint(g);
 		}
+		for(int i=0;i<tanks.size();i++) {
+			tanks.get(i).paint(g);
+		}
+		for(int i=0;i<bullets.size();i++) {
+			for(int j=0;j<tanks.size();j++) {
+				bullets.get(i).collideWith(tanks.get(j));
+			}
+		}
+		e.paint(g);
 //		x+=1;
 //		y+=10;
 	}

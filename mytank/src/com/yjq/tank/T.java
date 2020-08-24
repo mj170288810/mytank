@@ -16,6 +16,11 @@ public class T {
 
 	public static void main(String[] args) throws InterruptedException {
 		TankFrame tf=new TankFrame();
+		
+		for(int i=0;i<10;i++) {
+			tf.tanks.add(new Tank(200+i*50,200+i*50,Dir.DOWN,Group.BAD,tf));
+		}
+		
 		while (true) {
 			Thread.sleep(50);
 			tf.repaint();
