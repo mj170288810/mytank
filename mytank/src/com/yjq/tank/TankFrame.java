@@ -1,13 +1,15 @@
 package com.yjq.tank;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.HeadlessException;
+import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
     * @projectName： mytank
@@ -19,27 +21,20 @@ import java.awt.event.WindowListener;
 
 public class TankFrame extends Frame{
 
-	private int x=200,y=200;
+	Tank mytank = new Tank(200,200,Dir.DOWN,this);
+//	Bullet b=new Bullet(300,300,Dir.DOWN);
+	List<Bullet> bullets=new ArrayList<>();
+	public static final int GAME_WIDTH=1000,GAME_HEIGHT=800;
 	public TankFrame(){
-		this.setSize(1000, 800);
+		this.setSize(GAME_WIDTH, GAME_HEIGHT);
 		this.setResizable(false);
 		this.setTitle("tank war");
 		this.setVisible(true);
 		
 		this.addWindowListener(new WindowAdapter() {
 			
-			    /**
-			    * @Title: windowClosing
-			    * @author 杨君权
-			    * @Description: TODO(这里用一句话描述这个方法的作用)
-			    * @param 
-			    * @param 
-			    * @return 
-			    * @throws
-			    */
-			    
 			@Override
-			public void windowClosing(WindowEvent arg0) {
+			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
@@ -48,11 +43,35 @@ public class TankFrame extends Frame{
 		
 	}
 
+	
+	Image offScreenImage = null;
+
+	@Override
+	public void update(Graphics g) {
+		if (offScreenImage == null) {
+			offScreenImage = this.createImage(GAME_WIDTH, GAME_HEIGHT);
+		}
+		Graphics gOffScreen = offScreenImage.getGraphics();
+		Color c = gOffScreen.getColor();
+		gOffScreen.setColor(Color.BLACK);
+		gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+		gOffScreen.setColor(c);
+		paint(gOffScreen);
+		g.drawImage(offScreenImage, 0, 0, null);
+	}
+	
 	@Override
 	public void paint(Graphics g) {
-		System.out.print("paint");
-		g.fillRect(x, y, 50, 50);
-		x+=1;
+//		System.out.println("paint");
+		Color color = g.getColor();
+		g.setColor(Color.WHITE);
+		g.drawString("子弹的数量："+bullets.size(), 10, 60);
+		g.setColor(color);
+		mytank.paint(g);
+		for(int i=0;i<bullets.size();i++) {
+			bullets.get(i).paint(g);
+		}
+//		x+=1;
 //		y+=10;
 	}
 	
@@ -65,7 +84,7 @@ public class TankFrame extends Frame{
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
-			System.out.print("key pressed");
+//			System.out.print("key pressed");
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
 				case KeyEvent.VK_LEFT:
@@ -82,15 +101,14 @@ public class TankFrame extends Frame{
 					break;
 					default:break;
 			}
+			setMainTankDir();
 //			x+=50;
 //			repaint();
 		}
-
 		
-
 		@Override
 		public void keyReleased(KeyEvent e) {
-			System.out.print("key released");
+//			System.out.print("key released");
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
 				case KeyEvent.VK_LEFT:
@@ -105,9 +123,52 @@ public class TankFrame extends Frame{
 				case KeyEvent.VK_DOWN:
 					bD=false;
 					break;
-					default:break;
+				case KeyEvent.VK_CONTROL:
+					mytank.fire();
+				default:break;
 			}
+			setMainTankDir();
 		}
+
+		
+
+		
+		    /**
+		    * @Title: setMainTankDir
+		    * @author 杨君权
+		    * @Description: TODO(这里用一句话描述这个方法的作用)
+		    * @param 
+		    * @param 
+		    * @return 
+		    * @throws
+		    */
+		    
+		private void setMainTankDir() {
+			if(!bL && !bU && !bR && !bD) {
+				mytank.setMoving(false);
+			}else {
+				mytank.setMoving(true);
+				if(bL) {
+					mytank.setDir(Dir.LEFT);
+				}
+				if(bU) {
+					mytank.setDir(Dir.UP);
+				}
+				if(bR) {
+					mytank.setDir(Dir.RIGHT);
+				}
+				if(bD) {
+					mytank.setDir(Dir.DOWN);
+				}
+			}
+			
+			
+			
+		}
+
+
+
+		
 	}
 	
 }
