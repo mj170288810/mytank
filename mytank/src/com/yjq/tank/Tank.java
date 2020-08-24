@@ -17,6 +17,8 @@ public class Tank {
 	private Dir dir=Dir.DOWN;
 	public static final int SPEED=3;
 	private boolean moving = false;
+	private static int WIDTH=ResourceMgr.tankD.getWidth();
+	private static int HEIGHT=ResourceMgr.tankD.getHeight();
 	TankFrame tf = null;
 	public boolean isMoving() {
 		return moving;
@@ -61,10 +63,22 @@ public class Tank {
 	    */
 	    
 	public void paint(Graphics g) {
-		Color color = g.getColor();
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, 50, 50);
-		g.setColor(color);
+//		Color color = g.getColor();
+		switch(dir) {
+		case LEFT:
+			g.drawImage(ResourceMgr.tankL, x, y, null);
+			break;
+		case UP:
+			g.drawImage(ResourceMgr.tankU, x, y, null);
+			break;
+		case RIGHT:
+			g.drawImage(ResourceMgr.tankR, x, y, null);
+			break;
+		case DOWN:
+			g.drawImage(ResourceMgr.tankD, x, y, null);
+			break;
+		}
+		
 		move();
 	
 	}
@@ -111,7 +125,17 @@ public class Tank {
 			    */
 			    
 			public void fire() {
-				tf.bullets.add(new Bullet(this.x,this.y,this.dir,tf));
+				int bX=0;
+				int bY=0;
+				if(dir==Dir.DOWN ||dir==Dir.UP) {
+					bX=this.x+Tank.WIDTH/2-Bullet.WIDTH/2;
+					bY=this.y+Tank.HEIGHT/2-Bullet.HEIGHT/2;
+				}else {
+					bX=this.x+Tank.WIDTH/2;
+					bY=this.y+Tank.HEIGHT/2;
+				}
+				
+				tf.bullets.add(new Bullet(bX,bY,this.dir,this.tf));
 			}
 	
 	
