@@ -1,6 +1,7 @@
 package com.yjq.tank;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.Random;
 
 /**
@@ -20,6 +21,8 @@ public class Tank {
 	private boolean living = true;
 	private Random random = new Random();
 	private Group group = Group.BAD;
+	
+	public Rectangle rectangle=new Rectangle();
 	
 	public Group getGroup() {
 		return group;
@@ -50,6 +53,11 @@ public class Tank {
 		this.dir = dir;
 		this.group=group;
 		this.tf = tf;
+		
+		rectangle.x=this.x;
+		rectangle.y=this.y;
+		rectangle.height=HEIGHT;
+		rectangle.width=WIDTH;
 	}
 	public int getX() {
 		return x;
@@ -133,6 +141,9 @@ public class Tank {
 				break;
 				default:break;
 			}
+			
+			rectangle.x=this.x;
+			rectangle.y=this.y;
 			
 			this.boundsCheck();
 			
