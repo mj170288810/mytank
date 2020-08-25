@@ -157,6 +157,9 @@ public class Bullet {
 			if(rectangle1.intersects(rectangle2)) {
 				this.die();
 				tank.die();
+				int eX=tank.getX()+Tank.WIDTH/2-Bullet.WIDTH/2;
+				int eY=tank.getY()+Tank.HEIGHT/2-Bullet.HEIGHT/2;
+				tf.explodes.add(new Explode(eX, eY, tf));
 			}
 		}
 

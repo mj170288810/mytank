@@ -34,8 +34,8 @@ public class Tank {
 		this.living = living;
 	}
 
-	public static int WIDTH=ResourceMgr.tankD.getWidth();
-	public static int HEIGHT=ResourceMgr.tankD.getHeight();
+	public static int WIDTH=ResourceMgr.goodTankU.getWidth();
+	public static int HEIGHT=ResourceMgr.goodTankU.getHeight();
 	TankFrame tf = null;
 	public boolean isMoving() {
 		return moving;
@@ -87,16 +87,16 @@ public class Tank {
 //		Color color = g.getColor();
 		switch(dir) {
 		case LEFT:
-			g.drawImage(ResourceMgr.tankL, x, y, null);
+			g.drawImage(this.group==Group.GOOD?ResourceMgr.goodTankL:ResourceMgr.badTankL, x, y, null);
 			break;
 		case UP:
-			g.drawImage(ResourceMgr.tankU, x, y, null);
+			g.drawImage(this.group==Group.GOOD?ResourceMgr.goodTankU:ResourceMgr.badTankU, x, y, null);
 			break;
 		case RIGHT:
-			g.drawImage(ResourceMgr.tankR, x, y, null);
+			g.drawImage(this.group==Group.GOOD?ResourceMgr.goodTankR:ResourceMgr.badTankR, x, y, null);
 			break;
 		case DOWN:
-			g.drawImage(ResourceMgr.tankD, x, y, null);
+			g.drawImage(this.group==Group.GOOD?ResourceMgr.goodTankD:ResourceMgr.badTankD, x, y, null);
 			break;
 		}
 		
@@ -134,12 +134,42 @@ public class Tank {
 				default:break;
 			}
 			
+			if(x<=5) {
+				x=5;
+			}else if(x>=TankFrame.GAME_WIDTH-65) {
+				x=TankFrame.GAME_WIDTH-65;
+			}
+			
+			if(y<=30) {
+				y=30;
+			}else if(y>=TankFrame.GAME_HEIGHT-65) {
+				y=TankFrame.GAME_HEIGHT-65;
+			}
+			
 			if(this.group==Group.BAD && random.nextInt(100)>98) {
 				this.fire();
 			}
+			if(this.group==Group.BAD && random.nextInt(100)>95) {
+				this.randomDir();
+			}
 		}
 			
+			    
 			    /**
+			    * @Title: randomDir
+			    * @author 杨君权
+			    * @Description: TODO(这里用一句话描述这个方法的作用)
+			    * @param 
+			    * @param 
+			    * @return 
+			    * @throws
+			    */
+			    
+			private void randomDir() {
+				this.dir=Dir.values()[random.nextInt(4)];
+				
+			}
+				/**
 			    * @Title: fire
 			    * @author 杨君权
 			    * @Description: TODO(这里用一句话描述这个方法的作用)
@@ -152,13 +182,8 @@ public class Tank {
 			public void fire() {
 				int bX=0;
 				int bY=0;
-				if(dir==Dir.DOWN ||dir==Dir.UP) {
-					bX=this.x+Tank.WIDTH/2-Bullet.WIDTH/2;
-					bY=this.y+Tank.HEIGHT/2-Bullet.HEIGHT/2;
-				}else {
-					bX=this.x+Tank.WIDTH/2;
-					bY=this.y+Tank.HEIGHT/2;
-				}
+				bX=this.x+Tank.WIDTH/2-Bullet.WIDTH/2;
+				bY=this.y+Tank.HEIGHT/2-Bullet.HEIGHT/2;
 				
 				tf.bullets.add(new Bullet(bX,bY,this.dir,this.group,this.tf));
 			}
