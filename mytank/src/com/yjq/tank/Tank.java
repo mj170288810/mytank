@@ -16,7 +16,7 @@ public class Tank {
 	private int x,y;
 	private Dir dir=Dir.DOWN;
 	public static final int SPEED=3;
-	private boolean moving = false;
+	private boolean moving = true;
 	private boolean living = true;
 	private Random random = new Random();
 	private Group group = Group.BAD;
@@ -134,7 +134,7 @@ public class Tank {
 				default:break;
 			}
 			
-			if(this.group==Group.BAD && random.nextInt(100)>90) {
+			if(this.group==Group.BAD && random.nextInt(100)>98) {
 				this.fire();
 			}
 		}
