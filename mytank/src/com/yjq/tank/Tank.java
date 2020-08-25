@@ -134,17 +134,7 @@ public class Tank {
 				default:break;
 			}
 			
-			if(x<=5) {
-				x=5;
-			}else if(x>=TankFrame.GAME_WIDTH-65) {
-				x=TankFrame.GAME_WIDTH-65;
-			}
-			
-			if(y<=30) {
-				y=30;
-			}else if(y>=TankFrame.GAME_HEIGHT-65) {
-				y=TankFrame.GAME_HEIGHT-65;
-			}
+			this.boundsCheck();
 			
 			if(this.group==Group.BAD && random.nextInt(100)>98) {
 				this.fire();
@@ -155,7 +145,32 @@ public class Tank {
 		}
 			
 			    
+			    
 			    /**
+			    * @Title: boundsCheck
+			    * @author 杨君权
+			    * @Description: TODO(这里用一句话描述这个方法的作用)
+			    * @param 
+			    * @param 
+			    * @return 
+			    * @throws
+			    */
+			    
+			private void boundsCheck() {
+				if(x<=5) {
+					x=5;
+				}else if(x>=TankFrame.GAME_WIDTH-Tank.WIDTH-5) {
+					x=TankFrame.GAME_WIDTH-Tank.WIDTH-5;
+				}
+				
+				if(y<=30) {
+					y=30;
+				}else if(y>=TankFrame.GAME_HEIGHT-Tank.HEIGHT-5) {
+					y=TankFrame.GAME_HEIGHT-Tank.HEIGHT-5;
+				}
+				
+			}
+				/**
 			    * @Title: randomDir
 			    * @author 杨君权
 			    * @Description: TODO(这里用一句话描述这个方法的作用)
